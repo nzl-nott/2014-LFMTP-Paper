@@ -44,8 +44,9 @@ Next we define the reflexivity, symmetry and transitivity terms of any type. Let
 refl*-Tm : Tm {x:*} (var v0 =h var v0)
 refl*-Tm = Coh-Contr c*
 \end{code}
-\noindent  \textbf{Symmetry} (inverse) It is defined similarly. Note that the intricate names of contexts, as in \AgdaDatatype{Ty} \AgdaFunction{x:*,y:*,α:x=y} indicate their definitions which have been hidden. Recall that Agda treats all sequences of characters uninterrupted by whitespace as identifiers. For instance \AgdaFunction{x:*,y:*,α:x=y} is a name of a context for which we are assuming the definition:
-\AgdaFunction{x:*,y:*,α:x=y} \AgdaSymbol{=} \AgdaInductiveConstructor{ε} \AgdaInductiveConstructor{,} \AgdaInductiveConstructor{*} \AgdaInductiveConstructor{,} \AgdaInductiveConstructor{*} \AgdaInductiveConstructor{,} \AgdaSymbol{(}\AgdaInductiveConstructor{var} \AgdaSymbol{(}\AgdaInductiveConstructor{vS} \AgdaInductiveConstructor{v0}\AgdaSymbol{)} \AgdaInductiveConstructor{=h} \AgdaInductiveConstructor{var} \AgdaInductiveConstructor{v0}\AgdaSymbol{)}.
+\noindent  \textbf{Symmetry} (inverse) It is defined similarly. Note that the intricate names of contexts, as in \AgdaDatatype{Ty} \AgdaFunction{x:*,y:*,α:x=y} indicate their definitions which have been hidden. Agda treats all sequences of characters uninterrupted by whitespace as identifiers. For instance \AgdaFunction{x:*,y:*,α:x=y} is a name of a context for which we are assuming the definition:
+
+$\AgdaFunction{x:*,y:*,α:x=y} \AgdaSymbol{=} \AgdaInductiveConstructor{ε} \AgdaInductiveConstructor{,} \AgdaInductiveConstructor{*} \AgdaInductiveConstructor{,} \AgdaInductiveConstructor{*} \AgdaInductiveConstructor{,} \AgdaSymbol{(}\AgdaInductiveConstructor{var} \AgdaSymbol{(}\AgdaInductiveConstructor{vS} \AgdaInductiveConstructor{v0}\AgdaSymbol{)} \AgdaInductiveConstructor{=h} \AgdaInductiveConstructor{var} \AgdaInductiveConstructor{v0}\AgdaSymbol{)}$.
 
 
 \begin{code}
@@ -71,11 +72,11 @@ refl-Tm    : {Γ : Con}(A : Ty Γ)
            → Tm (rpl-T {Δ = x:*} A (var v0 =h var v0))
 refl-Tm A  = rpl-tm A refl*-Tm
 
-sym-Tm : ∀ {Γ}(A : Ty Γ) → Tm (rpl-T A sym*-Ty)
-sym-Tm A = rpl-tm A sym*-Tm
+sym-Tm    : ∀ {Γ}(A : Ty Γ) → Tm (rpl-T A sym*-Ty)
+sym-Tm A  = rpl-tm A sym*-Tm
 
-trans-Tm : ∀ {Γ}(A : Ty Γ) → Tm (rpl-T A trans*-Ty)
-trans-Tm A = rpl-tm A trans*-Tm
+trans-Tm    : ∀ {Γ}(A : Ty Γ) → Tm (rpl-T A trans*-Ty)
+trans-Tm A  = rpl-tm A trans*-Tm
 \end{code}
 \AgdaHide{
 \begin{code}
@@ -88,14 +89,14 @@ refl-Tm' A = (refl-Tm A)  [ map-1 ]tm ⟦ prf1 ⟫
     prf : rpl-tm {Δ = x:*} A (var v0) [ map-1 ]tm ≅ var v0
     prf = htrans (congtm (htrans ([⊚]tm (Σtm-it A (var v0))) 
           (htrans (congtm (Σtm-it-p1 A)) (htrans wk-coh wk-coh+)))) 
-           (1-1cm-same-v0 (ΣT-it-p1 A))
+           (1-1S-same-v0 (ΣT-it-p1 A))
 
     prf1 : (var v0 =h var v0) ≡ rpl-T {Δ = x:*} A (var v0 =h var v0) [ map-1 ]T
     prf1 = sym (trans (congT (rpl-T-p2 x:* A)) (hom≡ prf prf))
 
 refl-Fun : (Γ : Con)(A : Ty Γ)(x : Tm A) → Tm (x =h x)
 refl-Fun Γ A x =  (refl-Tm A) 
-                 [ IdCm , x ⟦ rpl*-A ⟫ ]tm 
+                 [ IdS , x ⟦ rpl*-A ⟫ ]tm 
                  ⟦ sym (trans (congT (rpl-T-p2 x:* A)) (hom≡ (rpl*-a A) (rpl*-a A))) ⟫
 
 Tm-sym-fun : (Γ : Con)(A : Ty Γ) 
@@ -116,7 +117,7 @@ Tm-sym-fun2 Γ A t =
 
   where 
     wk-id : (Γ , A , A +T A) ⇒ Γ 
-    wk-id = (IdCm +S A) +S (A +T A)
+    wk-id = (IdS +S A) +S (A +T A)
   
     eq1 : A [ wk-id ]T ≡ (A +T A) +T (A +T A) 
     eq1 = wk+S+T (wk+S+T IC-T)
@@ -181,32 +182,35 @@ Ty-G-assoc* = (trans*-Tm [ ((((• , vM) , vP) ,
 }
 
 \begin{code}
-Tm-right-identity* : Tm {x:*,y:*,α:x=y}
-         (trans*-Tm [ IdCm , vY , reflY ]tm =h vα)
+Tm-right-identity* : 
+  Tm {x:*,y:*,α:x=y} (trans*-Tm [ IdS , vY , reflY ]tm 
+  =h vα)
 Tm-right-identity* = Coh-Contr (ext c* v0)
 
-Tm-left-identity* : Tm {x:*,y:*,α:x=y}
-         (trans*-Tm [ ((IdCm ⊚ pr1 ⊚ pr1) , vX) ,
-          reflX , vY , vα ]tm =h vα)
+Tm-left-identity* : 
+  Tm {x:*,y:*,α:x=y} (trans*-Tm [ ((IdS ⊚ pr1 ⊚ pr1) , vX) ,
+  reflX , vY , vα ]tm =h vα)
 Tm-left-identity* = Coh-Contr (ext c* v0)
 
-Tm-right-inverse* : Tm {x:*,y:*,α:x=y}
-         (trans*-Tm [ (IdCm , vX) , sym*-Tm ]tm =h reflX)
+Tm-right-inverse* : 
+  Tm {x:*,y:*,α:x=y} (trans*-Tm [ (IdS , vX) , sym*-Tm ]tm 
+  =h reflX)
 Tm-right-inverse* = Coh-Contr (ext c* v0)
 
-
-
-Tm-left-inverse* : Tm {x:*,y:*,α:x=y}
-         (trans*-Tm [ ((• , vY) , vX , sym*-Tm , vY) , vα ]tm =h reflY)
+Tm-left-inverse* : 
+  Tm {x:*,y:*,α:x=y} (trans*-Tm [ ((• , vY) , vX , sym*-Tm ,
+  vY) , vα ]tm =h reflY)
 Tm-left-inverse* = Coh-Contr (ext c* v0)
 
-Tm-G-assoc* : Tm Ty-G-assoc*
-Tm-G-assoc* = Coh-Contr (ext (ext (ext c* v0) (vS v0)) (vS v0))
+Tm-G-assoc*  : Tm Ty-G-assoc*
+Tm-G-assoc*  = Coh-Contr (ext (ext (ext c* v0) (vS v0)) 
+             (vS v0))
 \end{code}
 \noindent Their general versions are defined using replacement. For instance, for associativity, we define:
 
 \begin{code}
-Tm-G-assoc    : ∀{Γ}(A : Ty Γ) → Tm (rpl-T A Ty-G-assoc*)
+Tm-G-assoc    : ∀{Γ}(A : Ty Γ) 
+              → Tm (rpl-T A Ty-G-assoc*)
 Tm-G-assoc A  = rpl-tm A Tm-G-assoc* 
 \end{code}
-Following the same pattern, the n-level groupoid laws can be obtained as the coherence constants as well.
+Following the same pattern, the $n$-level groupoid laws can be obtained as the coherence constants as well.

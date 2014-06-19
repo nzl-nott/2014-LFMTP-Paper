@@ -15,7 +15,7 @@ open import GroupoidStructure
 \end{code}
 }
 \subsection{Higher Structure} In the previous text we have shown how
-to define 1-groupoid structure on an arbitrary level. Here we indicate
+to define 1\-/groupoid structure on an arbitrary level. Here we indicate
 how all levels also bear the structure of $n$-groupoid for arbitrary
 $n$. The rough idea amounts to redefining telescopes of \cite{txa:csl}
 in terms of appropriate contexts, which are contractible, and the different
@@ -33,7 +33,7 @@ can define a morphism $S_n \Rightarrow S_{n+1}$ using $\AgdaInductiveConstructor
 to fill the last variable and variable terms on the first $n$
 levels. By composition of the context morphisms one defines $n$ new
 terms in the basic one variable context $*$ -- the iterated
-identities. Using suspension one can lift the identities to an
+identities. Finally, using suspension one can lift the identities to an
 arbitrary level.
 
 Each $n$-cell has $n$-compositions. In the case of
